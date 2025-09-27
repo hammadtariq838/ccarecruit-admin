@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LogOut, Settings, BarChart3 } from "lucide-react";
+import {
+  LogOut,
+  Settings,
+  LucideIcon,
+  LayoutDashboard,
+  Users,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,29 +22,22 @@ import {
 } from "@/components/ui/sidebar";
 import signOut from "@/actions/logoutAction";
 import { APP_ROUTES } from "@/utils/appRoutes";
-import { useUserStore } from "@/stores/user-store-provider";
-import { useEffect } from "react";
-import { getUserProfile } from "@/requests/client/user";
-import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+
+type NavItem = {
+  title: string;
+  href: string;
+  icon: LucideIcon;
+};
+
+const navItems: NavItem[] = [
+  { title: "Dashboard", href: APP_ROUTES.DASHBOARD, icon: LayoutDashboard },
+  { title: "Users", href: APP_ROUTES.USERS, icon: Users },
+  { title: "Settings", href: APP_ROUTES.SETTINGS, icon: Settings },
+];
 
 export function DashboardSidebar() {
   const pathname = usePathname();
-  const { updateUser } = useUserStore((state) => state);
-
-  const isActive = (path: string) => {
-    return pathname === path || pathname?.startsWith(`${path}/`);
-  };
-
-  useEffect(() => {
-    getUserProfile()
-      .then((user) => {
-        updateUser(user);
-      })
-      .catch((error) => {
-        console.log("error", error);
-        toast.error((error as Error).message);
-      });
-  }, []);
 
   return (
     <Sidebar>
@@ -51,25 +50,22 @@ export function DashboardSidebar() {
       </SidebarHeader>
       <SidebarContent className="pl-4 pt-2">
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              isActive={isActive(APP_ROUTES.DASHBOARD)}
-            >
-              <Link href={APP_ROUTES.DASHBOARD}>
-                <BarChart3 className="h-4 w-4" />
-                <span>Dashboard</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild isActive={isActive(APP_ROUTES.SETTINGS)}>
-              <Link href={APP_ROUTES.SETTINGS}>
-                <Settings className="h-4 w-4" />
-                <span>Settings</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          {navItems.map((item) => (
+            <SidebarMenuItem key={item.href}>
+              <SidebarMenuButton asChild>
+                <Link
+                  href={item.href}
+                  className={cn(
+                    "flex items-center",
+                    pathname === item.href && "font-bold text-primary"
+                  )}
+                >
+                  <item.icon className="mr-2 h-4 w-4" />
+                  {item.title}
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="pl-4">
