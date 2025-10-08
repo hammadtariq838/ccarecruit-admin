@@ -1,13 +1,5 @@
-import Link from "next/link";
 import AuthSigninForm from "./SignIn";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { APP_ROUTES } from "@/utils/appRoutes";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const SignInComponent = () => {
   return (
@@ -21,17 +13,6 @@ const SignInComponent = () => {
         <CardContent className="space-y-4">
           <AuthSigninForm />
         </CardContent>
-        <CardFooter className="flex flex-col space-y-2">
-          <div className="text-sm text-center text-muted-foreground">
-            Don&apos;t have an account?{" "}
-            <Link
-              href={APP_ROUTES.SIGN_UP}
-              className="text-primary hover:underline"
-            >
-              Sign up
-            </Link>
-          </div>
-        </CardFooter>
       </Card>
     </div>
   );

@@ -12,7 +12,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html>
+    <html className="dark">
       <body className="min-h-screen">
         <UserStoreProvider>
           <TanstackQueryProvider>{children}</TanstackQueryProvider>

@@ -1,4 +1,3 @@
-import { ParamsList } from "@/utils/typeDefs";
 import { AxiosError } from "axios";
 import { cookies } from "next/headers";
 import { CookieKeys } from "@/utils/constants";
@@ -6,6 +5,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { doDelete, doGet, doPatch, doPost, doPut } from "@/requests";
 import { permanentRedirect } from "next/navigation";
 import { APP_ROUTES } from "@/utils/appRoutes";
+
+type RouteContext = { params: Promise<{ slug: string[] }> };
 
 const serverURL = process.env.SERVER_URL as string;
 
@@ -122,11 +123,8 @@ const handleRequestBody = async (request: NextRequest) => {
   return body;
 };
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: ParamsList }
-) {
-  const { slug } = params;
+export async function GET(request: NextRequest, context: RouteContext) {
+  const { slug } = await context.params;
   const route = createRoute(slug);
   const searchParams = request.nextUrl.searchParams.toString();
   const headers = request.headers;
@@ -162,11 +160,8 @@ export async function GET(
   }
 }
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: ParamsList }
-) {
-  const { slug } = params;
+export async function POST(request: NextRequest, context: RouteContext) {
+  const { slug } = await context.params;
   const route = createRoute(slug);
   const headers = request.headers;
   const tokens = await getTokens();
@@ -201,11 +196,8 @@ export async function POST(
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: ParamsList }
-) {
-  const { slug } = params;
+export async function PUT(request: NextRequest, context: RouteContext) {
+  const { slug } = await context.params;
   const route = createRoute(slug);
   const searchParams = request.nextUrl.searchParams.toString();
   const headers = request.headers;
@@ -240,11 +232,8 @@ export async function PUT(
   }
 }
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: ParamsList }
-) {
-  const { slug } = params;
+export async function PATCH(request: NextRequest, context: RouteContext) {
+  const { slug } = await context.params;
   const route = createRoute(slug);
   const searchParams = request.nextUrl.searchParams.toString();
   const headers = request.headers;
@@ -279,11 +268,8 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: ParamsList }
-) {
-  const { slug } = params;
+export async function DELETE(request: NextRequest, context: RouteContext) {
+  const { slug } = await context.params;
   const route = createRoute(slug);
   const searchParams = request.nextUrl.searchParams.toString();
   const headers = request.headers;
