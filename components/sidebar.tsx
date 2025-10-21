@@ -2,15 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import {
   LogOut,
   Settings,
-  LucideIcon,
   LayoutDashboard,
   Users,
+  Zap,
+  Search,
+  FileText,
+  Workflow,
+  ChevronDown,
 } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
 import {
   Sidebar,
   SidebarContent,
@@ -19,56 +22,138 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import signOut from "@/actions/logoutAction";
 import { APP_ROUTES } from "@/utils/appRoutes";
 import { cn } from "@/lib/utils";
 
-type NavItem = {
-  title: string;
-  href: string;
-  icon: LucideIcon;
-};
-
-const navItems: NavItem[] = [
-  { title: "Dashboard", href: APP_ROUTES.DASHBOARD, icon: LayoutDashboard },
-  { title: "Users", href: APP_ROUTES.USERS, icon: Users },
-  { title: "Settings", href: APP_ROUTES.SETTINGS, icon: Settings },
-];
-
 export function DashboardSidebar() {
   const pathname = usePathname();
 
+  const menuItems = [
+    {
+      label: "Dashboard",
+      icon: LayoutDashboard,
+      id: "dashboard",
+    },
+    {
+      label: "Users",
+      icon: Users,
+      id: "users",
+    },
+    {
+      label: "Job Discovery",
+      icon: Search,
+      id: "discovery",
+      submenu: [
+        { label: "Scraping Sources", id: "scraping-sources" },
+        { label: "Job Listings", id: "job-listings" },
+        { label: "Filters", id: "filters" },
+      ],
+    },
+    {
+      label: "Enrichment",
+      icon: Zap,
+      id: "enrichment",
+      submenu: [
+        { label: "Workflows", id: "workflows" },
+        { label: "Job Title Mappings", id: "title-mappings" },
+        { label: "Contacts", id: "contacts" },
+      ],
+    },
+    {
+      label: "Outreach",
+      icon: Users,
+      id: "outreach",
+      submenu: [
+        { label: "Campaigns", id: "campaigns" },
+        { label: "Templates", id: "templates" },
+      ],
+    },
+    {
+      label: "Reports",
+      icon: FileText,
+      id: "reports",
+    },
+    {
+      label: "Monitoring",
+      icon: Workflow,
+      id: "monitoring",
+    },
+    {
+      label: "Settings",
+      icon: Settings,
+      id: "settings",
+    },
+  ];
+
   return (
     <Sidebar>
-      <SidebarHeader>
-        <div className="flex items-center px-2 py-3">
+      <SidebarHeader className="border-b">
+        <div className="flex items-center pl-4 gap-2.5">
           <Link href={APP_ROUTES.DASHBOARD}>
-            <img src="/logo.svg" alt="Logo" />
+            <img src="/logo.png" alt="Logo" className="h-14 w-14" />
           </Link>
+          <p className="text-2xl font-bold text-foreground">CCARecruit</p>
         </div>
       </SidebarHeader>
       <SidebarContent className="pl-4 pt-2">
         <SidebarMenu>
-          {navItems.map((item) => (
-            <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton asChild>
-                <Link
-                  href={item.href}
-                  className={cn(
-                    "flex items-center",
-                    pathname === item.href && "font-bold text-primary"
-                  )}
-                >
-                  <item.icon className="mr-2 h-4 w-4" />
-                  {item.title}
-                </Link>
-              </SidebarMenuButton>
+          {menuItems.map((item) => (
+            <SidebarMenuItem key={item.id}>
+              {item.submenu ? (
+                <Collapsible defaultOpen className="group/collapsible">
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton>
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.label}</span>
+                      <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      {item.submenu.map((subitem) => (
+                        <SidebarMenuSubItem key={subitem.id}>
+                          <SidebarMenuSubButton asChild>
+                            <Link
+                              href={`/${item.id}/${subitem.id}`}
+                              className={cn(
+                                pathname === `/${item.id}/${subitem.id}` &&
+                                  "font-bold"
+                              )}
+                            >
+                              {subitem.label}
+                            </Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </Collapsible>
+              ) : (
+                <SidebarMenuButton asChild>
+                  <Link
+                    href={`/${item.id}`}
+                    className={cn(pathname === `/${item.id}` && "font-bold")}
+                  >
+                    <item.icon className="h-4 w-4" />
+                    <span>{item.label}</span>
+                  </Link>
+                </SidebarMenuButton>
+              )}
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter className="pl-4">
+      <SidebarFooter className="pl-4 border-t">
         <form action={signOut}>
           <SidebarMenuButton asChild>
             <Button

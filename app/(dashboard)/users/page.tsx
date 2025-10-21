@@ -12,8 +12,10 @@ export default async function UsersPage() {
   const users = await fetchUsersOnServer();
 
   return (
-    <div className="container mx-auto py-6">
-      <h1 className="text-2xl font-semibold">Users</h1>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-foreground">Users</h1>
+      </div>
       <div className="my-4">
         <Table>
           <TableHeader>
@@ -22,9 +24,10 @@ export default async function UsersPage() {
                 Object.keys(users[0]).map((key) => (
                   <TableHead key={key}>
                     {key
-                      .replace(/([A-Z])/g, " $1") // insert space before capital letters
-                      .replace(/^./, (str) => str.toUpperCase()) // capitalize first letter
-                    }
+                      // insert space before capital letters
+                      .replace(/([A-Z])/g, " $1")
+                      // capitalize first letter
+                      .replace(/^./, (str) => str.toUpperCase())}
                   </TableHead>
                 ))}
             </TableRow>
