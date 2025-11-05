@@ -39,57 +39,59 @@ export default function OverviewPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">
-          Dashboard Overview
-        </h1>
+        <h1 className="text-3xl font-bold text-primary">Dashboard Overview</h1>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
+        <Card className="border-t-4 border-t-primary">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Jobs</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-foreground">
+              Total Jobs
+            </CardTitle>
+            <FileText className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">2,847</div>
+            <div className="text-2xl font-bold text-foreground">2,847</div>
             <p className="text-xs text-muted-foreground">+12% from last week</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-t-4 border-t-primary">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-sm font-medium text-foreground">
               Contacts Found
             </CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <Users className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1,243</div>
+            <div className="text-2xl font-bold text-foreground">1,243</div>
             <p className="text-xs text-muted-foreground">+8% from last week</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-t-4 border-t-primary">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Tasks</CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-foreground">
+              Active Tasks
+            </CardTitle>
+            <Activity className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">5</div>
+            <div className="text-2xl font-bold text-foreground">5</div>
             <p className="text-xs text-muted-foreground">2 running, 3 queued</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-t-4 border-t-primary">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-sm font-medium text-foreground">
               Enrichment Rate
             </CardTitle>
-            <Zap className="h-4 w-4 text-muted-foreground" />
+            <Zap className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">87%</div>
+            <div className="text-2xl font-bold text-foreground">87%</div>
             <p className="text-xs text-muted-foreground">Contacts verified</p>
           </CardContent>
         </Card>
@@ -97,18 +99,20 @@ export default function OverviewPage() {
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
+        <Card className="border-t-4 border-t-primary">
           <CardHeader>
-            <CardTitle>Jobs & Contacts Trend</CardTitle>
+            <CardTitle className="text-primary">
+              Jobs & Contacts Trend
+            </CardTitle>
             <CardDescription>Last 7 days activity</CardDescription>
           </CardHeader>
           <CardContent>
             <ChartContainer
               config={{
-                jobs: { label: "Jobs", color: "hsl(var(--chart-1))" },
-                contacts: { label: "Contacts", color: "hsl(var(--chart-2))" },
+                jobs: { label: "Jobs", color: "hsl(var(--primary))" },
+                contacts: { label: "Contacts", color: "hsl(var(--secondary))" },
               }}
-              className="h-80"
+              className="h-80 max-w-lg w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={jobsData}>
@@ -120,12 +124,14 @@ export default function OverviewPage() {
                   <Line
                     type="monotone"
                     dataKey="jobs"
-                    stroke="var(--color-jobs)"
+                    stroke="var(--color-primary)"
+                    strokeWidth={2}
                   />
                   <Line
                     type="monotone"
                     dataKey="contacts"
-                    stroke="var(--color-contacts)"
+                    stroke="var(--color-primary)"
+                    strokeWidth={2}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -133,17 +139,17 @@ export default function OverviewPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-t-4 border-t-primary">
           <CardHeader>
-            <CardTitle>Top Industries</CardTitle>
+            <CardTitle className="text-primary">Top Industries</CardTitle>
             <CardDescription>Jobs by industry</CardDescription>
           </CardHeader>
           <CardContent>
             <ChartContainer
               config={{
-                jobs: { label: "Jobs", color: "hsl(var(--chart-1))" },
+                jobs: { label: "Jobs", color: "hsl(var(--primary))" },
               }}
-              className="h-80"
+              className="h-80 max-w-lg w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
@@ -159,7 +165,11 @@ export default function OverviewPage() {
                   <XAxis dataKey="industry" />
                   <YAxis />
                   <ChartTooltip content={<ChartTooltipContent />} />
-                  <Bar dataKey="jobs" fill="var(--color-jobs)" />
+                  <Bar
+                    dataKey="jobs"
+                    fill="var(--color-primary)"
+                    radius={[4, 4, 0, 0]}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </ChartContainer>

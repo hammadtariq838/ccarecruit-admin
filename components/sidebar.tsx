@@ -53,11 +53,7 @@ export function DashboardSidebar() {
       label: "Job Discovery",
       icon: Search,
       id: "discovery",
-      submenu: [
-        { label: "Scraping Sources", id: "scraping-sources" },
-        { label: "Job Listings", id: "job-listings" },
-        { label: "Filters", id: "filters" },
-      ],
+      submenu: [{ label: "Scraping Sources", id: "scraping-sources" }],
     },
     {
       label: "Enrichment",
@@ -97,12 +93,11 @@ export function DashboardSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader className="border-b">
+      <SidebarHeader className="border-b-2 border-b-primary/20 bg-background">
         <div className="flex items-center pl-4 gap-2.5">
           <Link href={APP_ROUTES.DASHBOARD}>
-            <img src="/logo.png" alt="Logo" className="h-14 w-14" />
+            <img src="/logo.png" alt="Logo" className="h-28 w-28" />
           </Link>
-          <p className="text-2xl font-bold text-foreground">CCARecruit</p>
         </div>
       </SidebarHeader>
       <SidebarContent className="pl-4 pt-2">
@@ -112,7 +107,12 @@ export function DashboardSidebar() {
               {item.submenu ? (
                 <Collapsible defaultOpen className="group/collapsible">
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton>
+                    <SidebarMenuButton
+                      className={cn(
+                        "data-[active=true]:bg-transparent hover:bg-transparent bg-transparent active:bg-transparent text-primary",
+                        pathname.startsWith(`/${item.id}`) && "font-semibold"
+                      )}
+                    >
                       <item.icon className="h-4 w-4" />
                       <span>{item.label}</span>
                       <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
@@ -122,14 +122,15 @@ export function DashboardSidebar() {
                     <SidebarMenuSub>
                       {item.submenu.map((subitem) => (
                         <SidebarMenuSubItem key={subitem.id}>
-                          <SidebarMenuSubButton asChild>
-                            <Link
-                              href={`/${item.id}/${subitem.id}`}
-                              className={cn(
-                                pathname === `/${item.id}/${subitem.id}` &&
-                                  "font-bold"
-                              )}
-                            >
+                          <SidebarMenuSubButton
+                            className={cn(
+                              "hover:text-primary hover:bg-transparent text-primary",
+                              pathname === `/${item.id}/${subitem.id}` &&
+                                "font-bold"
+                            )}
+                            asChild
+                          >
+                            <Link href={`/${item.id}/${subitem.id}`}>
                               {subitem.label}
                             </Link>
                           </SidebarMenuSubButton>
@@ -139,11 +140,14 @@ export function DashboardSidebar() {
                   </CollapsibleContent>
                 </Collapsible>
               ) : (
-                <SidebarMenuButton asChild>
-                  <Link
-                    href={`/${item.id}`}
-                    className={cn(pathname === `/${item.id}` && "font-bold")}
-                  >
+                <SidebarMenuButton
+                  className={cn(
+                    "data-[active=true]:bg-transparent hover:bg-transparent hover:text-primary",
+                    pathname === `/${item.id}` && "text-primary font-semibold"
+                  )}
+                  asChild
+                >
+                  <Link href={`/${item.id}`}>
                     <item.icon className="h-4 w-4" />
                     <span>{item.label}</span>
                   </Link>
@@ -158,7 +162,7 @@ export function DashboardSidebar() {
           <SidebarMenuButton asChild>
             <Button
               variant="ghost"
-              className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+              className="w-full justify-start text-destructive hover:text-destructive/70 hover:bg-transparent font-semibold"
             >
               <LogOut className="mr-2 h-4 w-4" />
               Logout
